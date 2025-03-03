@@ -1,0 +1,6 @@
+@BreadOven_HostAddress = http://localhost:5052
+
+GET {{BreadOven_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
