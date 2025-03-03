@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BreadOven.Controllers
 {
@@ -17,17 +18,25 @@ namespace BreadOven.Controllers
         }
 
         [HttpPost("AddFactory")]
-        public async Task<ActionResult> AddFactory( string? name)
+        public async Task<ActionResult> AddFactory([FromBody] string name)
         {
-            FactoryLines newfactory = new FactoryLines()
-            {
-                Name = name,
-            };
-            
 
-            _context.FactoryLines.Add(newfactory);
-            _context.SaveChanges();
-            return Ok(new Response<FactoryLines>() { Value = newfactory, Message = "Factory added successfully!" });
+            if (name.Length > 3 && name is not null)
+            {
+                FactoryLines newfactory = new FactoryLines()
+                {
+                    Name = name,
+                };
+
+
+                _context.FactoryLines.Add(newfactory);
+                _context.SaveChanges();
+                return Ok(new Response<FactoryLines>() { Value = newfactory, Message = "Factory added successfully!" });
+            }
+            else
+            {
+                return BadRequest(new Response<FactoryLines>() { Message = "أدخل اسم اكثر من 3 حروف" });
+            }
 
         }
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreadOven.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250208130712_update-Coststablefortype")]
-    partial class updateCoststablefortype
+    [Migration("20250303092309_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,7 @@ namespace BreadOven.Migrations
                     b.ToTable("typeOfCosts");
                 });
 
-            modelBuilder.Entity("BreadOven.Models.Distrubutionfromitem", b =>
+            modelBuilder.Entity("BreadOven.Models.CostsAndDistrubutionfromitem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,11 +55,18 @@ namespace BreadOven.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("FixedSalary")
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DistCost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Percentage")
                         .HasColumnType("decimal(18,2)");
@@ -67,8 +74,8 @@ namespace BreadOven.Migrations
                     b.Property<decimal>("TotalOperatingSalary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("VariableSalary")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -104,12 +111,18 @@ namespace BreadOven.Migrations
                     b.Property<decimal>("EnergyReq")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("HourlyOperatingRate")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OperatingHours")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Totalvalueofhoursdeprication")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("factoryLinesId")
                         .HasColumnType("int");
@@ -160,7 +173,46 @@ namespace BreadOven.Migrations
                     b.ToTable("ProductionLineDepreciations");
                 });
 
-            modelBuilder.Entity("BreadOven.Models.Distrubutionfromitem", b =>
+            modelBuilder.Entity("BreadOven.Models.UnitProduction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("OperatingHoursQuantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("costsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("unitNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("unitType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("costsId");
+
+                    b.ToTable("unitProductions");
+                });
+
+            modelBuilder.Entity("BreadOven.Models.CostsAndDistrubutionfromitem", b =>
                 {
                     b.HasOne("BreadOven.Models.Item", "Item")
                         .WithMany()
@@ -180,6 +232,25 @@ namespace BreadOven.Migrations
                         .IsRequired();
 
                     b.Navigation("FactoryLines");
+                });
+
+            modelBuilder.Entity("BreadOven.Models.UnitProduction", b =>
+                {
+                    b.HasOne("BreadOven.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BreadOven.Models.Costs", "Costs")
+                        .WithMany()
+                        .HasForeignKey("costsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Costs");
+
+                    b.Navigation("Item");
                 });
 #pragma warning restore 612, 618
         }

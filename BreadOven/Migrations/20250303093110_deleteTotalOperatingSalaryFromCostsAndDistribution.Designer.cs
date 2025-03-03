@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreadOven.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250212142036_updateitemwithhourlyoperatingrate")]
-    partial class updateitemwithhourlyoperatingrate
+    [Migration("20250303093110_deleteTotalOperatingSalaryFromCostsAndDistribution")]
+    partial class deleteTotalOperatingSalaryFromCostsAndDistribution
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,7 @@ namespace BreadOven.Migrations
                     b.ToTable("typeOfCosts");
                 });
 
-            modelBuilder.Entity("BreadOven.Models.Distrubutionfromitem", b =>
+            modelBuilder.Entity("BreadOven.Models.CostsAndDistrubutionfromitem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,20 +55,24 @@ namespace BreadOven.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("FixedSalary")
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DistCost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Percentage")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("TotalOperatingSalary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("VariableSalary")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -205,7 +209,7 @@ namespace BreadOven.Migrations
                     b.ToTable("unitProductions");
                 });
 
-            modelBuilder.Entity("BreadOven.Models.Distrubutionfromitem", b =>
+            modelBuilder.Entity("BreadOven.Models.CostsAndDistrubutionfromitem", b =>
                 {
                     b.HasOne("BreadOven.Models.Item", "Item")
                         .WithMany()

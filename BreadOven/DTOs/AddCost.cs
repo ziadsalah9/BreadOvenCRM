@@ -17,5 +17,7 @@ namespace BreadOven.DTOs
       "3->  تكاليف غير مباشرة ثابته " +
       "4-> تكاليف غير مباشرة متغيرة  ")]
         public int Type { get; set; }
+
+        
     }
 }

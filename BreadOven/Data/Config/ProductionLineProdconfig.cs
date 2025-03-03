@@ -11,8 +11,8 @@ namespace BreadOven.Data.Config
             builder.Property(p => p.OriginalValue).HasColumnType("decimal(18,3)");
             builder.Property(p => p.valueYear).HasColumnType("decimal(18,3)");
             builder.Property(p => p.valueMonth).HasColumnType("decimal(18,3)");
-            builder.Property(p => p.valueDay).HasColumnType("decimal(18,2)");
-            builder.Property(p => p.valueHour).HasColumnType("decimal(18,2)");
+            builder.Property(p => p.valueDay).HasColumnType("decimal(18,3)");
+            builder.Property(p => p.valueHour).HasColumnType("decimal(18,3)");
 
         }
     }

@@ -10,7 +10,8 @@ namespace BreadOven.Data.Config
         public void Configure(EntityTypeBuilder<Costs> builder)
         {
 
-            builder.Property(p => p.Cost).HasColumnType("decimal(18,3)");
+            builder.Property(p => p.Cost).HasColumnType("decimal(18,3)").HasPrecision(18, 3);
+            ;
             //    builder .Property(e => e.Type)
             //   .HasConversion(
             //       v => v.ToString(),

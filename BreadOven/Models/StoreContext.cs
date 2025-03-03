@@ -14,7 +14,7 @@ namespace BreadOven.Models
         public DbSet<FactoryLines> FactoryLines { get; set; }
         public DbSet<Item> items { get; set; }
 
-        public DbSet<Distrubutionfromitem> Distrubutionfromitems { get; set; }
+        public DbSet<CostsAndDistrubutionfromitem> CostsAndDistrubutionfromitems { get; set; }
 
         public DbSet<Costs> typeOfCosts { get; set; }
 

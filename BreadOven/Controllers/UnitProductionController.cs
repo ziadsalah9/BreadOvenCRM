@@ -28,7 +28,7 @@ namespace BreadOven.Controllers
             var costofunitproduction = _context.typeOfCosts.Where(c => c.Id == idofcosts).FirstOrDefault();
 
             var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == idofitems);
-            var dist = _context.Distrubutionfromitems.FirstOrDefault(p => p.ItemId == idofitems).Percentage;
+            var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == idofitems).Percentage;
 
 
             if (costofunitproduction == null )

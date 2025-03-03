@@ -1,0 +1,26 @@
+﻿[
+  {
+    "name": "عيش لبناني صغير",
+    "energyReq": 90000,
+    "operatingHours": 300,
+    "factoryLinesId": 1
+  },
+  {
+    "name": "عيش لبناني وسط",
+    "energyReq": 1600000,
+    "operatingHours": 1500,
+    "factoryLinesId": 1
+  },
+  {
+    "name": "عيش لبناني كبير",
+    "energyReq": 555000,
+    "operatingHours": 500,
+    "factoryLinesId": 1
+  },
+  {
+    "name": "عيش لبناني جاميو",
+    "energyReq": 235000,
+    "operatingHours": 400,
+    "factoryLinesId": 1
+  }
+]

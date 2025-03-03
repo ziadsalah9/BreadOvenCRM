@@ -2,6 +2,8 @@
 {
     public class AddProductionLineDepDTO
     {
+
+
         public string Name { get; set; }
 
         public int ProductionAgeYear { get; set; }
