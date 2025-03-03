@@ -22,37 +22,55 @@ namespace BreadOven.Controllers
         public async Task<ActionResult> AddDistribution( int itemid , AddCost add)
         {
 
-            var result = _context.items.FirstOrDefault(x => x.Id == itemid);
-            var SumofOperattingsHours = _context.items.Sum(p => p.OperatingHours);
-            //var fixedsalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور الثابتة").Cost;
-            //var variablesalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور المتغيرة").Cost;
-            var Percentagee = result.OperatingHours * (decimal)Math.Pow(SumofOperattingsHours, -1);
-            CostsAndDistrubutionfromitem newdistribution = new()
+
+            if (itemid !=null)
             {
+                var result = _context.items.FirstOrDefault(x => x.Id == itemid);
+                if (result != null )
+                {
+                    var SumofOperattingsHours = _context.items.Sum(p => p.OperatingHours);
+                    //var fixedsalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور الثابتة").Cost;
+                    //var variablesalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور المتغيرة").Cost;
+                    var Percentagee = result.OperatingHours * (decimal)Math.Pow(SumofOperattingsHours, -1);
+                    CostsAndDistrubutionfromitem newdistribution = new()
+                    {
 
-                Percentage = result.OperatingHours *(decimal) Math.Pow( SumofOperattingsHours,-1),
+                        Percentage = result.OperatingHours * (decimal)Math.Pow(SumofOperattingsHours, -1),
 
-                Cost =add.Cost,
+                        Cost = add.Cost,
 
-                DistCost = add.Cost*Percentagee,
-                Name = add.Name,
-                Type = add.Type,
-                
-
-                //FixedSalary = fixedsalary / (result.OperatingHours / SumofOperattingsHours),
-                //VariableSalary = variablesalary / (result.OperatingHours / SumofOperattingsHours),
-                //TotalOperatingSalary = (fixedsalary + variablesalary) / (result.OperatingHours / SumofOperattingsHours),
-                //TotalOperatingSalary = (fixedsalary* Percentagee) + (variablesalary*Percentagee),
-                ItemId = itemid
+                        DistCost = add.Cost * Percentagee,
+                        Name = add.Name,
+                        Type = add.Type,
 
 
+                        //FixedSalary = fixedsalary / (result.OperatingHours / SumofOperattingsHours),
+                        //VariableSalary = variablesalary / (result.OperatingHours / SumofOperattingsHours),
+                        //TotalOperatingSalary = (fixedsalary + variablesalary) / (result.OperatingHours / SumofOperattingsHours),
+                        //TotalOperatingSalary = (fixedsalary* Percentagee) + (variablesalary*Percentagee),
+                        ItemId = itemid
 
-            };
 
-            await _context.CostsAndDistrubutionfromitems.AddAsync(newdistribution);
-            _context.SaveChanges();
-            return Ok(new Response<CostsAndDistrubutionfromitem>() { Value = newdistribution, Message = "distribution added successfully!" });
 
+                    };
+
+                    await _context.CostsAndDistrubutionfromitems.AddAsync(newdistribution);
+                    _context.SaveChanges();
+                    return Ok(new Response<CostsAndDistrubutionfromitem>() { Value = newdistribution, Message = "تم الاضافة بنجاح !" });
+                }
+                else
+                {
+                    return BadRequest(new Response<CostsAndDistrubutionfromitem>() { Message = "لا يوجد هذا العنصر فى الوقت الحالى" });
+
+
+                }
+
+            }
+            else
+            {
+                return BadRequest(new Response<CostsAndDistrubutionfromitem>() {  Message = "! فشل الاضافة " });
+
+            }
 
         }
 

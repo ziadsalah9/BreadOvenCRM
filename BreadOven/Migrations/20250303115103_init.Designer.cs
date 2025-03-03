@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreadOven.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250303092309_init")]
+    [Migration("20250303115103_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -71,9 +71,6 @@ namespace BreadOven.Migrations
                     b.Property<decimal>("Percentage")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("TotalOperatingSalary")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -81,7 +78,7 @@ namespace BreadOven.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("Distrubutionfromitems");
+                    b.ToTable("CostsAndDistrubutionfromitems");
                 });
 
             modelBuilder.Entity("BreadOven.Models.FactoryLines", b =>
@@ -193,12 +190,6 @@ namespace BreadOven.Migrations
                     b.Property<decimal>("UnitValue")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("costsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("unitNumber")
-                        .HasColumnType("int");
-
                     b.Property<string>("unitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -206,8 +197,6 @@ namespace BreadOven.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("costsId");
 
                     b.ToTable("unitProductions");
                 });
@@ -241,14 +230,6 @@ namespace BreadOven.Migrations
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BreadOven.Models.Costs", "Costs")
-                        .WithMany()
-                        .HasForeignKey("costsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Costs");
 
                     b.Navigation("Item");
                 });

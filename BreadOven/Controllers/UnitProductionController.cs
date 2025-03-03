@@ -1,4 +1,5 @@
-﻿using BreadOven.Models;
+﻿using BreadOven.DTOs;
+using BreadOven.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,52 +21,67 @@ namespace BreadOven.Controllers
         [HttpPost("AddUnitProduction" +
             "")]
 
-        public async Task<ActionResult> AddUnitProductions(int idofcosts,int idofitems , string unit , decimal Quantity , int unitno=1 )
+        public async Task<ActionResult> AddUnitProductions(UnitProductionDto undto )
         {
 
 
 
-            var costofunitproduction = _context.typeOfCosts.Where(c => c.Id == idofcosts).FirstOrDefault();
 
-            var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == idofitems);
-            var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == idofitems).Percentage;
+            var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == undto.idofitems);
 
-
-            if (costofunitproduction == null )
+            if (sa3ateltash8el != null)
             {
-                return NotFound();
+                var costofunitproduction = _context.CostsAndDistrubutionfromitems.Where(c => c.Id == sa3ateltash8el.Id).FirstOrDefault();
+
+                var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == undto.idofitems).Percentage;  // دايما هترجعلى قيمة عادى
+
+
+                if (costofunitproduction == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var unitProduction = new UnitProduction
+                    {
+
+                        //  1 مواد خام
+                        //  2 تشغيلية
+                        // 3 مباشرة
+                        // 4 غير مباشرة
+
+                        unitType = undto.unit,
+                        OperatingHoursQuantity = undto.Quantity,
+                        UnitValue = costofunitproduction.Type == 1 ? costofunitproduction.Cost * undto.Quantity : ((dist * costofunitproduction.Cost) / (sa3ateltash8el.OperatingHours)) * undto.Quantity,
+                        Price = costofunitproduction.Type == 1 ? costofunitproduction.Cost : (dist * costofunitproduction.Cost) / (sa3ateltash8el.OperatingHours),
+                        ItemId = undto.idofitems,
+                        //costsId = undto.idofitems,   // مبقتش محتاج السطر ده تقدر تشله عادى
+
+
+
+
+
+                    };
+
+
+
+                    _context.Add(unitProduction);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(unitProduction);
+                }
+
+                
+
             }
             else
             {
-                var unitProduction = new UnitProduction
-                {
-
-                    //  1 مواد خام
-                    //  2 تشغيلية
-                    // 3 مباشرة
-                    // 4 غير مباشرة
-
-                    unitType = unit,
-                    OperatingHoursQuantity = Quantity,
-                    UnitValue = costofunitproduction.Type == 1 ? costofunitproduction.Cost * Quantity : ((dist * costofunitproduction.Cost) / (sa3ateltash8el.OperatingHours))*Quantity,
-                    unitNumber = unitno,
-                    Price = costofunitproduction.Type == 1 ? costofunitproduction.Cost : (dist*costofunitproduction.Cost)/(sa3ateltash8el.OperatingHours),
-                    ItemId = idofitems,
-                    costsId = idofcosts,
-                    
-                    
-
-
-
-                };
-
-
-
-                _context.Add(unitProduction);
-                await _context.SaveChangesAsync();
-
-                return Ok(unitProduction);
+                return BadRequest(new Response<UnitProduction>() { Message = " لا يوجد هذا الصنف فى الوقت الحالى" });
             }
+
+
+
+
 
         }
     }

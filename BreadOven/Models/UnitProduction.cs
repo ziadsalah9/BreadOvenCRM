@@ -15,17 +15,11 @@ namespace BreadOven.Models
 
         public string  unitType { get; set; }
         
-        public int unitNumber { get; set; }
         public decimal UnitValue { get; set; }     //  unit price from the costs * operating hoursquanitiy 
 
     
         public decimal Price { get; set; }
 
-
-
-        [ForeignKey("Costs")]
-        public int costsId { get; set; }
-        public Costs Costs { get; set; }
 
 
 

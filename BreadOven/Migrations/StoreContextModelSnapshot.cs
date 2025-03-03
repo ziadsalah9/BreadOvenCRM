@@ -187,12 +187,6 @@ namespace BreadOven.Migrations
                     b.Property<decimal>("UnitValue")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("costsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("unitNumber")
-                        .HasColumnType("int");
-
                     b.Property<string>("unitType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -200,8 +194,6 @@ namespace BreadOven.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("costsId");
 
                     b.ToTable("unitProductions");
                 });
@@ -235,14 +227,6 @@ namespace BreadOven.Migrations
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BreadOven.Models.Costs", "Costs")
-                        .WithMany()
-                        .HasForeignKey("costsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Costs");
 
                     b.Navigation("Item");
                 });
