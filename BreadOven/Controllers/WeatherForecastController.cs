@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BreadOven.Controllers
 {
@@ -31,3 +31,15 @@ namespace BreadOven.Controllers
         }
     }
 }
+
+
+
+
+/*
+ 
+  هتضيف تانى كوست اند ديستريبيوشن اى دى علشان لما اجى اختار دقيق هلاقيه موجود عندى قبل كده وهتبقي عبارة عن دروب داون ليست 
+ 
+ 
+ */
+
+

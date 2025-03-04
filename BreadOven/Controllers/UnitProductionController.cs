@@ -25,13 +25,17 @@ namespace BreadOven.Controllers
         {
 
 
+            
+            // here 
+
+          
 
 
             var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == undto.idofitems);
 
             if (sa3ateltash8el != null)
             {
-                var costofunitproduction = _context.CostsAndDistrubutionfromitems.Where(c => c.Id == sa3ateltash8el.Id).FirstOrDefault();
+                var costofunitproduction = _context.CostsAndDistrubutionfromitems.Where(c => c.Id == undto.idofCosts && c.ItemId==sa3ateltash8el.Id).FirstOrDefault();
 
                 var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == undto.idofitems).Percentage;  // دايما هترجعلى قيمة عادى
 
@@ -54,11 +58,11 @@ namespace BreadOven.Controllers
                         OperatingHoursQuantity = undto.Quantity,
                         UnitValue = costofunitproduction.Type == 1 ? costofunitproduction.Cost * undto.Quantity : ((dist * costofunitproduction.Cost) / (sa3ateltash8el.OperatingHours)) * undto.Quantity,
                         Price = costofunitproduction.Type == 1 ? costofunitproduction.Cost : (dist * costofunitproduction.Cost) / (sa3ateltash8el.OperatingHours),
-                        ItemId = undto.idofitems,
-                        //costsId = undto.idofitems,   // مبقتش محتاج السطر ده تقدر تشله عادى
+                        //ItemId = undto.idofitems,
+                        costsAndDistributionId = undto.idofCosts,   // مبقتش محتاج السطر ده تقدر تشله عادى
+                       
 
-
-
+                      
 
 
                     };
@@ -86,3 +90,19 @@ namespace BreadOven.Controllers
         }
     }
 }
+
+
+
+/*
+ 
+ 
+
+remove item fid 
+add costanddis fid
+
+
+            var sa3ateltash8el = _context.costsanddist.FirstOrDefault(p => p.Id == undto.idofcosts);
+
+ 
+ 
+ */

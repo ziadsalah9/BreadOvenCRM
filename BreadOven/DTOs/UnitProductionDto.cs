@@ -7,6 +7,13 @@ namespace BreadOven.DTOs
 
 
 
+
+
+            [Required(ErrorMessage = "من فضلك ادخل العنصر")]
+
+
+            public int idofCosts { get; set; }
+
             [Required(ErrorMessage ="من فضلك ادخل العنصر")]
             public int idofitems { get; set; }
             [Required]

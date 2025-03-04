@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BreadOven.Controllers
 {
-  
+
     public class ItemController : BaseController
     {
 
@@ -19,7 +19,7 @@ namespace BreadOven.Controllers
         }
 
         [HttpPost("AddItem")]
-        public async Task <ActionResult> AddItem(AddItemDto addItem)
+        public async Task<ActionResult> AddItem(AddItemDto addItem)
         {
 
 
@@ -32,16 +32,16 @@ namespace BreadOven.Controllers
                 Name = addItem.Name,
                 OperatingHours = addItem.OperatingHours,
                 factoryLinesId = addItem.factoryLinesId,
-                HourlyOperatingRate = addItem.OperatingHours *(decimal)Math.Pow(addItem.EnergyReq,-1),
-                Totalvalueofhoursdeprication = res * (1 * addItem.OperatingHours*(decimal)Math.Pow(addItem.EnergyReq, -1))
+                HourlyOperatingRate = addItem.OperatingHours * (decimal)Math.Pow(addItem.EnergyReq, -1),
+                Totalvalueofhoursdeprication = res * (1 * addItem.OperatingHours * (decimal)Math.Pow(addItem.EnergyReq, -1))
 
 
 
             };
 
-             await _context.items.AddAsync(newitem);
+            await _context.items.AddAsync(newitem);
             _context.SaveChanges();
-            return Ok(new Response<Item>() { Value = newitem , Message = "item added successfully!"});
+            return Ok(new Response<Item>() { Value = newitem, Message = "item added successfully!" });
 
 
 
@@ -55,7 +55,6 @@ namespace BreadOven.Controllers
 
             return Ok(await _context.items.ToListAsync());
         }
-
 
     }
 }

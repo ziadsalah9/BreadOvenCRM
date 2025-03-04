@@ -23,9 +23,15 @@ namespace BreadOven.Models
 
 
 
-        [ForeignKey("Item")]
-        public int ItemId { get; set; }
-        public Item Item { get; set; }
+        //[ForeignKey("Item")]
+        //public int ItemId { get; set; }
+        //public Item Item { get; set; }
+
+
+        [ForeignKey(nameof(CostsAndDistrubutionfromitem))]
+        public int costsAndDistributionId { get; set; }
+
+        public CostsAndDistrubutionfromitem CostsAndDistrubutionfromitem{ get; set; }
 
     }
 }
