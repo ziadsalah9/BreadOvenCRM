@@ -1,8 +1,7 @@
-﻿namespace BreadOven.Models
+﻿namespace BreadOven.core.Models
 {
-    public class FactoryLines
+    public class FactoryLines :BaseEntity
     {
-        public int Id { get; set; }  
 
         public string? Name {  get; set; }   //  خط الانتاج الاول   المصنع الاول
        

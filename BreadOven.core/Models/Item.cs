@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreadOven.Models
+namespace BreadOven.core.Models
 {
-    public class Item
+    public class Item :BaseEntity
     {
 
-        public int Id { get; set; }
         public string Name { get; set; }
 
         public decimal EnergyReq { get; set; }

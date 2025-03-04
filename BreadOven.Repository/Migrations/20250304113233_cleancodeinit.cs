@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace BreadOven.Migrations
+namespace BreadOven.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class cleancodeinit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,31 +31,16 @@ namespace BreadOven.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductionAgeYear = table.Column<int>(type: "int", nullable: false),
-                    OriginalValue = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    OriginalValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ValuePercentage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    valueYear = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    valueMonth = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    valueDay = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
-                    valueHour = table.Column<decimal>(type: "decimal(18,3)", nullable: false)
+                    valueYear = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    valueMonth = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    valueDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    valueHour = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductionLineDepreciations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "typeOfCosts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_typeOfCosts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,7 +52,7 @@ namespace BreadOven.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EnergyReq = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OperatingHours = table.Column<int>(type: "int", nullable: false),
-                    Totalvalueofhoursdeprication = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Totalvalueofhoursdeprication = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     HourlyOperatingRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     factoryLinesId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -89,10 +74,10 @@ namespace BreadOven.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Percentage = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                    DistCost = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Percentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DistCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -112,19 +97,19 @@ namespace BreadOven.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OperatingHoursQuantity = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    OperatingHoursQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     unitType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UnitValue = table.Column<decimal>(type: "decimal(18,5)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
-                    ItemId = table.Column<int>(type: "int", nullable: false)
+                    UnitValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    costsAndDistributionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_unitProductions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_unitProductions_items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "items",
+                        name: "FK_unitProductions_CostsAndDistrubutionfromitems_costsAndDistributionId",
+                        column: x => x.costsAndDistributionId,
+                        principalTable: "CostsAndDistrubutionfromitems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -140,25 +125,22 @@ namespace BreadOven.Migrations
                 column: "factoryLinesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_unitProductions_ItemId",
+                name: "IX_unitProductions_costsAndDistributionId",
                 table: "unitProductions",
-                column: "ItemId");
+                column: "costsAndDistributionId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CostsAndDistrubutionfromitems");
-
-            migrationBuilder.DropTable(
                 name: "ProductionLineDepreciations");
 
             migrationBuilder.DropTable(
-                name: "typeOfCosts");
+                name: "unitProductions");
 
             migrationBuilder.DropTable(
-                name: "unitProductions");
+                name: "CostsAndDistrubutionfromitems");
 
             migrationBuilder.DropTable(
                 name: "items");

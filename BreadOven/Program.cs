@@ -1,6 +1,8 @@
 
+using BreadOven.core.IRepositories;
 using BreadOven.Hubs;
-using BreadOven.Models;
+using BreadOven.Repository;
+using BreadOven.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BreadOven
@@ -20,6 +22,9 @@ namespace BreadOven
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+            builder.Services.AddScoped(typeof(IGenricRepository<>), typeof(GenericRepository<>));
 
             builder.Services.AddCors(options =>
             {

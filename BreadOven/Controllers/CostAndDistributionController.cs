@@ -1,5 +1,6 @@
-﻿using BreadOven.DTOs;
-using BreadOven.Models;
+﻿using BreadOven.core.IRepositories;
+using BreadOven.core.Models;
+using BreadOven.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,14 @@ namespace BreadOven.Controllers
     public class CostAndDistributionController : BaseController
     {
 
-        private readonly StoreContext _context;
-        public CostAndDistributionController(StoreContext context)
-        {
+        private readonly IGenricRepository<CostsAndDistrubutionfromitem> _costsAndDistrubutionfromitemRepo;
+        private readonly IGenricRepository<Item> _itemRepo;
 
-            _context = context;
+        public CostAndDistributionController(IGenricRepository<CostsAndDistrubutionfromitem> costsAndDistrubutionfromitem, IGenricRepository<Item> itemRepo)
+        {
+            _costsAndDistrubutionfromitemRepo = costsAndDistrubutionfromitem;
+            _itemRepo = itemRepo;
+
         }
 
 
@@ -25,10 +29,13 @@ namespace BreadOven.Controllers
 
             if (itemid !=null)
             {
-                var result = _context.items.FirstOrDefault(x => x.Id == itemid);
+                var result = await _itemRepo.GetById(itemid);
+              
                 if (result != null )
                 {
-                    var SumofOperattingsHours = _context.items.Sum(p => p.OperatingHours);
+
+                    
+                    var SumofOperattingsHours =(double) await _itemRepo.SumAsync(p => p.OperatingHours);
                     //var fixedsalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور الثابتة").Cost;
                     //var variablesalary = _context.typeOfCosts.FirstOrDefault(p => p.Name == "الاجور المتغيرة").Cost;
                     var Percentagee = result.OperatingHours * (decimal)Math.Pow(SumofOperattingsHours, -1);
@@ -54,8 +61,7 @@ namespace BreadOven.Controllers
 
                     };
 
-                    await _context.CostsAndDistrubutionfromitems.AddAsync(newdistribution);
-                    _context.SaveChanges();
+                 await _costsAndDistrubutionfromitemRepo.AddAsync(newdistribution);
                     return Ok(new Response<CostsAndDistrubutionfromitem>() { Value = newdistribution, Message = "تم الاضافة بنجاح !" });
                 }
                 else
@@ -77,7 +83,7 @@ namespace BreadOven.Controllers
         [HttpGet("getall")]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _context.CostsAndDistrubutionfromitems.ToListAsync());
+            return Ok(await _costsAndDistrubutionfromitemRepo.GetAll());
 
         }
     }

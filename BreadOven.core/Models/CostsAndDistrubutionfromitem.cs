@@ -1,14 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreadOven.Models
+namespace BreadOven.core.Models
 {
-    public class CostsAndDistrubutionfromitem
+    public class CostsAndDistrubutionfromitem :BaseEntity
     {
-
-        public int Id { get; set; }
-
-
-
         public string Name { get; set; }
 
         public decimal Cost { get; set; }

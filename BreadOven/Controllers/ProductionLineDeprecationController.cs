@@ -1,5 +1,6 @@
-﻿using BreadOven.DTOs;
-using BreadOven.Models;
+﻿using BreadOven.core.IRepositories;
+using BreadOven.core.Models;
+using BreadOven.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +10,13 @@ namespace BreadOven.Controllers
   
     public class ProductionLineDeprecationController : BaseController
     {
-        private readonly StoreContext _context;
 
-        public ProductionLineDeprecationController(StoreContext context)
+        private readonly IGenricRepository<ProductionLineDepreciation> _ProductionLineDepreciationRepo;
+
+        public ProductionLineDeprecationController(IGenricRepository<ProductionLineDepreciation> ProductionLineDepreciationRepo)
         {
-            _context = context;
+
+            _ProductionLineDepreciationRepo = ProductionLineDepreciationRepo;
 
         }
 
@@ -33,9 +36,7 @@ namespace BreadOven.Controllers
                 valueHour = prod.OriginalValue * ((decimal)Math.Pow(prod.ProductionAgeYear * 8760, -1))
             };
 
-
-            await _context.ProductionLineDepreciations.AddAsync(newprod);
-            _context.SaveChanges();
+           await  _ProductionLineDepreciationRepo.AddAsync(newprod);
 
             return Ok(new Response<ProductionLineDepreciation>() { Value = newprod,Message = "Add Successfully!"});
 
@@ -45,7 +46,7 @@ namespace BreadOven.Controllers
         public async Task <ActionResult> GetAll()
         {
 
-            return Ok( await _context.ProductionLineDepreciations.ToListAsync());
+            return Ok( await _ProductionLineDepreciationRepo.GetAll());
         }
 
 

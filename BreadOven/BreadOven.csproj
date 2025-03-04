@@ -21,4 +21,8 @@
     <Folder Include="Data\SeedingTestDataJSON\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BreadOven.Repository\BreadOven.Repository.csproj" />
+  </ItemGroup>
+
 </Project>

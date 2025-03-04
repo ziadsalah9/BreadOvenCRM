@@ -1,4 +1,4 @@
-﻿namespace BreadOven.Models
+﻿namespace BreadOven.core.Models
 {
     public class Response<T>
     {

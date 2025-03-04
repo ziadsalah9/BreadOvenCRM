@@ -1,5 +1,6 @@
-﻿using BreadOven.Hubs;
-using BreadOven.Models;
+﻿using BreadOven.core.IRepositories;
+using BreadOven.core.Models;
+using BreadOven.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -12,12 +13,12 @@ namespace BreadOven.Controllers
     public class FactoryLinesController : BaseController
     {
 
-        private readonly StoreContext _context;
+        private readonly IGenricRepository<FactoryLines> _FactoryLineRepo;
         private readonly IHubContext<NotificationHub> hubContext; 
 
-        public FactoryLinesController(StoreContext _context, IHubContext<NotificationHub> hubContext)
+        public FactoryLinesController(IGenricRepository<FactoryLines> FactoryLineRepo, IHubContext<NotificationHub> hubContext)
         {
-            this._context = _context;
+            _FactoryLineRepo = FactoryLineRepo;
             this.hubContext = hubContext;
         }
 
@@ -33,8 +34,9 @@ namespace BreadOven.Controllers
                 };
 
 
-                _context.FactoryLines.Add(newfactory);
-                _context.SaveChanges();
+                await _FactoryLineRepo.AddAsync(newfactory);
+
+              //  await      _context.FactoryLines.AddAsync(newfactory);
                 return Ok(new Response<FactoryLines>() { Value = newfactory, Message = "Factory added successfully!" });
             }
             else
@@ -49,14 +51,14 @@ namespace BreadOven.Controllers
 
         public async Task<ActionResult> GetAll()
         {
-            return Ok(await _context.FactoryLines.ToListAsync());
+            return Ok(await _FactoryLineRepo.GetAll());
         }
 
 
         [HttpPut("update")]
         public async Task<ActionResult> Update([FromBody] UpdateDto dto)
         {
-            var old = await _context.FactoryLines.FindAsync(dto.Id);
+            var old = await _FactoryLineRepo.GetById(dto.Id);
 
             if (old == null)
             {
@@ -65,7 +67,8 @@ namespace BreadOven.Controllers
 
             old.Name = dto.newName;
 
-            await _context.SaveChangesAsync();
+            _FactoryLineRepo.Edit(old);
+
 
             string message = $"FactoryLine updated to: {dto.newName}.";
 

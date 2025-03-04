@@ -1,5 +1,6 @@
-﻿using BreadOven.DTOs;
-using BreadOven.Models;
+﻿using BreadOven.core.IRepositories;
+using BreadOven.core.Models;
+using BreadOven.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +13,27 @@ namespace BreadOven.Controllers
 
 
 
-        private readonly StoreContext _context;
-        public ItemController(StoreContext context)
+        private readonly IGenricRepository<Item> _ItemRepo;
+        private readonly IGenricRepository<ProductionLineDepreciation> _ProductionLineDepreciationRepo;
+
+
+
+        public ItemController(IGenricRepository<Item> ItemRepo, IGenricRepository<ProductionLineDepreciation> ProductionLineDepreciationRepo)
         {
-            _context = context;
+            
+            _ItemRepo = ItemRepo;
+            _ProductionLineDepreciationRepo = ProductionLineDepreciationRepo;
         }
+       
 
         [HttpPost("AddItem")]
         public async Task<ActionResult> AddItem(AddItemDto addItem)
         {
 
 
-            var res = _context.ProductionLineDepreciations.Sum(p => p.valueHour);
+            //var res = _context.ProductionLineDepreciations.Sum(p => p.valueHour);
+
+            var res = await _ProductionLineDepreciationRepo.SumAsync(p => p.valueHour);   
 
 
             Item newitem = new Item()
@@ -38,9 +48,9 @@ namespace BreadOven.Controllers
 
 
             };
+            
 
-            await _context.items.AddAsync(newitem);
-            _context.SaveChanges();
+           await _ItemRepo.AddAsync(newitem);
             return Ok(new Response<Item>() { Value = newitem, Message = "item added successfully!" });
 
 
@@ -53,7 +63,7 @@ namespace BreadOven.Controllers
         {
 
 
-            return Ok(await _context.items.ToListAsync());
+            return Ok(await _ItemRepo.GetAll());
         }
 
     }

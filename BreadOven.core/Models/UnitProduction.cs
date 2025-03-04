@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreadOven.Models
+namespace BreadOven.core.Models
 {
-    public class UnitProduction
+    public class UnitProduction :BaseEntity
     {
 
 
 
-        public int Id { get; set; }
 
         public decimal OperatingHoursQuantity { get; set; }   
 

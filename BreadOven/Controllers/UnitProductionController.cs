@@ -1,5 +1,6 @@
-﻿using BreadOven.DTOs;
-using BreadOven.Models;
+﻿using BreadOven.core.IRepositories;
+using BreadOven.core.Models;
+using BreadOven.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,17 +10,21 @@ namespace BreadOven.Controllers
     public class UnitProductionController : ControllerBase
     {
 
-        private readonly StoreContext _context;
+        private readonly IGenricRepository<UnitProduction> _unitproductionRepo;
+        private readonly IGenricRepository<Item> _itemsRepo;
+        private readonly IGenricRepository<CostsAndDistrubutionfromitem> _CostsAndDistrubutionfromitemRepo;
 
-        public UnitProductionController(StoreContext context)
+        public UnitProductionController(IGenricRepository<UnitProduction> unitproductionRepo , IGenricRepository<Item>itemsRepo,
+            IGenricRepository<CostsAndDistrubutionfromitem> CostsAndDistrubutionfromitemRepo)
         {
-            _context = context;
+           _unitproductionRepo = unitproductionRepo;
+            _itemsRepo = itemsRepo;
+            _CostsAndDistrubutionfromitemRepo = CostsAndDistrubutionfromitemRepo;
 
         }
 
 
-        [HttpPost("AddUnitProduction" +
-            "")]
+        [HttpPost("AddUnitProduction")]
 
         public async Task<ActionResult> AddUnitProductions(UnitProductionDto undto )
         {
@@ -31,13 +36,21 @@ namespace BreadOven.Controllers
           
 
 
-            var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == undto.idofitems);
+            //var sa3ateltash8el = _context.items.FirstOrDefault(p => p.Id == undto.idofitems);
+            var sa3ateltash8el = await _itemsRepo.GetById(undto.idofitems);
+
 
             if (sa3ateltash8el != null)
             {
-                var costofunitproduction = _context.CostsAndDistrubutionfromitems.Where(c => c.Id == undto.idofCosts && c.ItemId==sa3ateltash8el.Id).FirstOrDefault();
+               // var costofunitproduction = _context.CostsAndDistrubutionfromitems.Where(c => c.Id == undto.idofCosts && c.ItemId==sa3ateltash8el.Id).FirstOrDefault();
 
-                var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == undto.idofitems).Percentage;  // دايما هترجعلى قيمة عادى
+                var costofunitproduction = await _CostsAndDistrubutionfromitemRepo.GetValue(p => p.Id == undto.idofCosts && p.ItemId == sa3ateltash8el.Id);
+
+                // EXPRESSION<FUNC <CostsID,ItemID , T>> 
+                if (costofunitproduction == null) return NotFound("غير موجود");
+
+                //var dist = _context.CostsAndDistrubutionfromitems.FirstOrDefault(p => p.ItemId == undto.idofitems).Percentage;  // دايما هترجعلى قيمة عادى
+                var dist = costofunitproduction.Percentage;  // دايما هترجعلى قيمة عادى
 
 
                 if (costofunitproduction == null)
@@ -69,8 +82,7 @@ namespace BreadOven.Controllers
 
 
 
-                    _context.Add(unitProduction);
-                    await _context.SaveChangesAsync();
+                  await _unitproductionRepo.AddAsync(unitProduction);
 
                     return Ok(unitProduction);
                 }

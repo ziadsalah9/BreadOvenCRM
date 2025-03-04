@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
-namespace BreadOven.Models
+namespace BreadOven.core.Models
 {
-    public class ProductionLineDepreciation
+    public class ProductionLineDepreciation :BaseEntity
     {
 
 
 
-        public int Id { get; set; }
         public string Name { get; set; }
 
         public int ProductionAgeYear { get; set; }
